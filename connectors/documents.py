@@ -34,6 +34,9 @@ class DocumentConnector(object):
         return Search(using=self.client, index=self.index)
 
     def add(self, body, doc_id=None, **kwargs):
+        """
+        raises: NotFoundError
+        """
         res = self.client.index(
             index=self.index, doc_type=self.doc_type,
             id=doc_id, body=body, **kwargs
@@ -44,12 +47,6 @@ class DocumentConnector(object):
         return self.client.get(
             index=self.index, doc_type=self.doc_type, id=id_
         )
-
-    def get_by_title(self, title):
-        return self.search_obj \
-            .query("match", title=title) \
-            .execute() \
-            .hits()
 
     def delete_by_id(self, id_):
         self.client.delete(
