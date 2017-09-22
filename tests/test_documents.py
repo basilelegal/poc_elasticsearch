@@ -3,8 +3,11 @@
 from __future__ import unicode_literals
 
 import unittest
-import unittest.mock as mock
-import collections
+
+try:
+    import unittest.mock as mock
+except ImportError:
+    from mock import mock
 
 from elasticsearch.exceptions import NotFoundError
 from elasticmock import elasticmock, FakeElasticsearch
