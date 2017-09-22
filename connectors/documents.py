@@ -48,12 +48,6 @@ class DocumentConnector(object):
             index=self.index, doc_type=self.doc_type, id=id_
         )
 
-    def get_by_title(self, title):
-        return self.search_obj \
-            .query("match", title=title) \
-            .execute() \
-            .hits()
-
     def delete_by_id(self, id_):
         self.client.delete(
             index=self.index, doc_type=self.doc_type, id=id_
