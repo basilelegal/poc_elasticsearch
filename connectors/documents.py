@@ -33,10 +33,10 @@ class DocumentConnector(object):
     def search_obj(self):
         return Search(using=self.client, index=self.index)
 
-    def add(self, body, **kwargs):
+    def add(self, body, doc_id=None, **kwargs):
         res = self.client.index(
-            index=self.index, doc_type=self.doc_type, body=body,
-            **kwargs
+            index=self.index, doc_type=self.doc_type,
+            id=doc_id, body=body, **kwargs
         )
         return res.get('_id', None)
 
