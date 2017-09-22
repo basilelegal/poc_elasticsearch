@@ -2,8 +2,6 @@
 
 from __future__ import unicode_literals
 
-import json
-
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 
@@ -13,8 +11,13 @@ DEFAULT_DOCTYPE = 'doctype'
 
 class DocumentConnector(object):
 
-    def __init__(self, index=DEFAULT_INDEX, doc_type=DEFAULT_DOCTYPE):
-        self.client = Elasticsearch()
+    def __init__(
+            self,
+            index=DEFAULT_INDEX,
+            doc_type=DEFAULT_DOCTYPE,
+            **kwargs
+    ):
+        self.client = Elasticsearch(**kwargs)
         self._index = index
         self._doc_type = doc_type
 
@@ -30,13 +33,10 @@ class DocumentConnector(object):
     def search_obj(self):
         return Search(using=self.client, index=self.index)
 
-    def add(self, body=None, path=''):
-        if not body:
-            with open(path, 'r') as json_file:
-                body = json.load(json_file)
-
+    def add(self, body, **kwargs):
         res = self.client.index(
-            index=self.index, doc_type=self.doc_type, body=body
+            index=self.index, doc_type=self.doc_type, body=body,
+            **kwargs
         )
         return res.get('_id', None)
 
