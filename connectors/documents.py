@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
+from elasticsearch_dsl.query import MultiMatch
 
 DEFAULT_INDEX = 'index'
 DEFAULT_DOCTYPE = 'doctype'
@@ -29,9 +30,9 @@ class DocumentConnector(object):
     def search_obj(self):
         return Search(using=self.client, index=self.index)
 
-    def add(self, body=None):
+    def add(self, body=None, path=''):
         if not body:
-            with open('data/truite.json', 'r') as json_file:
+            with open(path, 'r') as json_file:
                 body = json.load(json_file)
 
         res = self.client.index(
@@ -55,5 +56,20 @@ class DocumentConnector(object):
             index=self.index, doc_type=self.doc_type, id=id_
         )
 
+    def find(self, query, fields=None):
+        if not fields:
+            fields= ['title^5', 'raw_text']
+        response = self.client.search(
+            index=self.index,
+            body={
+                'query': {
+                    'query_string': {
+                        'analyze_wildcard': True,
+                        'fields': fields,
+                        'query': query
+                    }
+                }
+            }
+        )
 
-doc = DocumentConnector()
+        return response['hits']['hits']
