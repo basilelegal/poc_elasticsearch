@@ -3,16 +3,16 @@
 from __future__ import unicode_literals
 
 import json
-from datetime import datetime
+
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
-from elasticsearch_dsl.query import MultiMatch
 
 DEFAULT_INDEX = 'index'
 DEFAULT_DOCTYPE = 'doctype'
 
 
 class DocumentConnector(object):
+
     def __init__(self, index=DEFAULT_INDEX, doc_type=DEFAULT_DOCTYPE):
         self.client = Elasticsearch()
         self._index = index
