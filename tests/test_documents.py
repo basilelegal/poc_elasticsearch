@@ -7,7 +7,7 @@ import unittest
 try:
     import unittest.mock as mock
 except ImportError:
-    from mock import mock
+    import mock
 
 from elasticsearch.exceptions import NotFoundError
 from elasticmock import elasticmock, FakeElasticsearch
