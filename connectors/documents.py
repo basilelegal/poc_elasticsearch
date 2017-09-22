@@ -56,15 +56,26 @@ class DocumentConnector(object):
             index=self.index, doc_type=self.doc_type, id=id_
         )
 
-    def find(self, query, fields=None):
-        if not fields:
-            fields= ['title^5', 'raw_text']
+    def find(self, query, fields, analyze_wildcard=True):
+        """
+        :param query:
+        :param fields: [('title', 5), 'raw_text']
+        :param analyze_wildcard: Boolean
+        :return:
+        """
+        _fields = []
+        for field in fields:
+            if isinstance(field, (tuple, list)):
+                _fields.append('{}^{}'.format(field[0], field[1]))
+            else:
+                _fields.append(field)
+
         response = self.client.search(
             index=self.index,
             body={
                 'query': {
                     'query_string': {
-                        'analyze_wildcard': True,
+                        'analyze_wildcard': analyze_wildcard,
                         'fields': fields,
                         'query': query
                     }
