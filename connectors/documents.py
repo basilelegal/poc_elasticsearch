@@ -55,4 +55,3 @@ class DocumentConnector(object):
 		)
 		
 doc = DocumentConnector()
-doc.test()
