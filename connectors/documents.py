@@ -76,7 +76,7 @@ class DocumentConnector(object):
                 'query': {
                     'query_string': {
                         'analyze_wildcard': analyze_wildcard,
-                        'fields': fields,
+                        'fields': _fields,
                         'query': query
                     }
                 }
